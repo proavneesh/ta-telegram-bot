@@ -16,10 +16,10 @@ def home():
 def run_fastapi():
     uvicorn.run(app_fastapi, host="0.0.0.0", port=8000)
 
-# ✅ Aapka bot token
-BOT_TOKEN = '7585327553:AAHmgLbbL124JjL4FzzYA1Z0XPm2RYbrz54'
+# ✅ Your new bot token
+BOT_TOKEN = '7952761769:AAE6gGZidtJcspccoSSGcQcJr5HTy_-7ca4'
 
-# ✅ FAQ Answers dictionary
+# ✅ FAQ Answers dictionary (30 questions)
 faq_answers = {
     "free": "✅ Yes, ham ek business model provide karte hain jisme training aur guidance hoti hai.",
     "skill": "✅ Ham sab kuch sikhate hain step-by-step.",
@@ -30,24 +30,90 @@ faq_answers = {
     "payment": "✅ Direct bank account ya UPI pe aayega.",
     "genuine": "✅ Haan, real clients ke real projects milte hain.",
     "office": "✅ Yeh online business model hai, jisme ghar se kaam hota hai.",
-    "support": "✅ Haan, aapko har stage pe mentor milta hai."
+    "support": "✅ Haan, aapko har stage pe mentor milta hai.",
+    "investment": "✅ Shuruaat mein aapko *koi bhi investment karne ki zarurat nahi hai.*\n\n🎯 Pehle aap thoda bahut kamao, phir wahi paisa system mein laga kar apna kaam expand karo. Hamari guidance ke saath aap zero se shuruaat kar sakte ho!",
+    "refund": "✅ Agar system work na kare to aapko refund ka option milta hai.",
+    "course": "✅ Yeh koi course nahi, yeh ek business partner model hai.",
+    "future": "✅ Isme aap apna khud ka business build kar sakte ho.",
+    "language": "✅ Hindi mein training aur communication hoti hai.",
+    "age": "✅ 12+ age wale log bhi isme shuruaat kar sakte hain. Agar aapke paas mobile aur dedication hai, to yeh safar aapke liye perfect hai!",
+    "certificate": "✅ Skills ke liye digital certification bhi milta hai.",
+    "whatsapp": "✅ WhatsApp support available hai jab aap join kar lete ho.",
+    "trust": "✅ 1000+ log already is model se earn kar rahe hain.",
+    "mobile": "✅ Sirf ek smartphone se bhi aap shuruaat kar sakte ho.",
+    "content": "✅ Aapko content, templates aur guidance sab milta hai.",
+    "graphic": "✅ Graphic design ke liye tools aur tutorials milenge.",
+    "video": "✅ Video editing tools aur apps sikhaye jaate hain.",
+    "ads": "✅ Social media ads chalana bhi sikhaya jaata hai.",
+    "clients": "✅ Aapko clients milne ke liye full support hota hai.",
+    "tools": "✅ Sare tools aur platform ka access diya jaata hai.",
+    "earning proof": "✅ Haan, earning proofs bhi share kiye jaate hain.",
+    "english": "✅ English seekhne ki zarurat nahi, Hindi mein sab kuch milega.",
+    "laptop": "✅ Laptop optional hai, lekin helpful hota hai.",
+    "fake": "❌ Yeh fake nahi hai. Real logon ka real kaam hai.",
+    "join": "✅ Aap website ke through form bhar ke join kar sakte ho."
 }
 
 # ✅ /start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("⏳ Please wait...")
     await update.message.chat.send_action(action=ChatAction.TYPING)
     keyboard = [
         [InlineKeyboardButton("YES ✅", callback_data='yes')],
         [InlineKeyboardButton("NO ❌", callback_data='no')]
     ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text(
-        "🔥 Apni life badalne ka waqt aa gaya hai!\n\n"
-        "Agar aap YouTube, Facebook ya mobile mein time barbaad kar rahe ho bina kisi direction ke, to yeh moka mat gavaana!\n\n"
-        "🚀 Sirf 3 Aasan Steps follow karo, aur apna earning journey start karo ghar baithe.\n\n"
-        "👇👇 Shuru karne ke liye ek option choose karo:",
-        reply_markup=reply_markup
+        "🚀 *Safar shuru karo!*\n\n"
+        "Agar aap apna time YouTube/Facebook pe waste kar rahe ho bina kisi goal ke, to ab wakt hai badlav ka!\n\n"
+        "🎯 Sirf 3 Simple Steps follow karo aur apna online earning journey start karo.\n\n"
+        "👇 Shuru karne ke liye ek option choose karo:",
+        parse_mode='Markdown',
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
+# ✅ /help command
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🤖 *Madad chahiye?*\n\n"
+        "Aap niche diye gaye commands use kar sakte ho:\n\n"
+        "/start – Safar shuru karo 🚀\n"
+        "/projects – Available projects ke details\n"
+        "/contact – WhatsApp pe baat karein\n"
+        "/community – TA community join karo\n\n"
+        "Kisi bhi topic par sawaal ho to poochho! 👇",
+        parse_mode='Markdown'
+    )
+
+# ✅ /projects command
+async def projects(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🛠 *Available Projects:*\n\n"
+        "✅ Video Editing (Reels, YouTube)\n"
+        "✅ Poster & Banner Design\n"
+        "✅ Affiliate Marketing Projects\n"
+        "✅ Business Page Promotion\n\n"
+        "🎯 Har skill ke liye proper training milti hai.\n"
+        "🔗 Join karo aur projects lena shuru karo!"
+    )
+
+# ✅ /contact command
+async def contact(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "📲 *WhatsApp Contact:*\n\n"
+        "👉 Direct baat karne ke liye WhatsApp par message bhejein:\n"
+        "[Click to Chat](https://wa.me/917703940672)\n\n"
+        "❓ Confusion hai? WhatsApp pe message bhejein ya copy-paste se start karein.\n"
+        "👥 Real mentor se baat karke har doubt clear karein.",
+        parse_mode='Markdown'
+    )
+
+# ✅ /community command
+async def community(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🌐 *TA Community Join Karein:*\n\n"
+        "👉 Hamari main community ka link milega:\n"
+        "https://taonlinebusinessag.wixsite.com/my-site-2\n\n"
+        "🔗 Uske andar 7 important groups hain – unhe bhi join karein!\n"
+        "💬 Network banayein, seekhein, aur projects grab karein!"
     )
 
 # ✅ Button click handler
@@ -59,70 +125,54 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data == 'yes':
         keyboard = [[InlineKeyboardButton("NEXT ▶️", callback_data='next1')]]
         await query.edit_message_text(
-            "🎉 Zabardast! Aapne ek sahi decision liya hai – Welcome to *TA Online Business Agency*!\n\n"
-            "✅ Ab aap ek nayi journey ki shuruaat karne ja rahe hain jisme aap:\n"
-            "🎯 Kaam ke saath kamaana bhi seekhenge\n"
-            "🎯 Naye skills sikhoge jo demand mein hain:\n"
-            "- Video Editing\n"
-            "- Graphic Designing\n"
-            "- Social Media Marketing\n"
-            "- Affiliate Marketing\n"
-            "- Aur bhi bahut kuch...\n\n"
-            "💼 Aapko milega:\n"
-            "✔️ Training + Projects\n"
-            "✔️ Business Partner ka role\n"
-            "✔️ Earning ke kai options\n\n"
-            "👇 Aage badhne ke liye \"Next\" pe click karo:",
+            "🎉 Welcome to *TA Online Business Agency*!\n\n"
+            "🔥 Naye skills sikhkar earning ka safar start karo:\n"
+            "- Video Editing\n- Graphic Design\n- Social Media Marketing\n- Affiliate Marketing\n\n"
+            "💼 Training + Projects + Business Partnership\n\n"
+            "👇 Click 'Next' to continue:",
             parse_mode='Markdown',
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
-
     elif data == 'no':
         keyboard = [
             [InlineKeyboardButton("YES ✅", callback_data='yes')],
             [InlineKeyboardButton("NO ❌", callback_data='no')]
         ]
         await query.edit_message_text(
-            "💔 Shayad aap is moka ki value nahi samajh pa rahe ho...\n\n"
-            "🌟 Jab tak life mein naya try nahi karoge, naye results nahi milenge.\n"
-            "👉 Kya aap hamesha sirf scroll hi karte rahoge? Ab action lene ka time hai!\n\n"
-            "👇 Soch samajh ke wapas try karo:",
+            "💔 Aapne moka miss kar diya...\n\n"
+            "⚠️ Action lene se hi zindagi badalti hai. Soch samajh ke wapas try karo:",
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
-
     elif data == 'next1':
         keyboard = [[InlineKeyboardButton("NEXT ▶️", callback_data='next2')]]
         await query.edit_message_text(
-            "🌐 Step 1: Sabse pehle hamari website par jao:\n"
+            "🌐 *Step 1: Visit our website:*\n"
             "👉 https://taonlinebusinessag.wixsite.com/my-site-2\n\n"
-            "📌 Website ke andar har chij ko read karo – images dekho, har text padho.\n"
-            "🚫 Koi bhi form ya detail skip mat karo.\n"
-            "📄 Pura form bharo, bina skip kiye.\n"
-            "⚠️ Pehle detail bharo, fir WhatsApp button pe click karo.\n\n"
-            "👇 Jab samajh aa jaaye to ‘Next’ pe click karo:",
+            "📄 Form complete bharein aur har detail padhein.\n"
+            "🔎 Koi bhi step skip na karein.\n\n"
+            "👇 Jab complete ho jaaye to 'Next' dabayein:",
+            parse_mode='Markdown',
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
-
     elif data == 'next2':
         keyboard = [[InlineKeyboardButton("NEXT ▶️", callback_data='next3')]]
         await query.edit_message_text(
-            "🟢 Step 2: Form bharne ke baad niche scroll karo – aapko WhatsApp button milega.\n\n"
-            "👉 Agar samajh nahi aa raha ki kya bhejna hai to, button ke upar ek “Copy Message” ka option milega. Uspe click karo.\n"
-            "📲 WhatsApp pe click karke message paste karo aur bhej do.\n"
-            "🗣️ Leader se kam se kam 10 minute baat karo, unse apna doubt clear karo.\n\n"
-            "👇 Jab yeh ho jaaye to ‘Next’ dabao:",
+            "🟢 *Step 2: WhatsApp se Contact karein:*\n\n"
+            "📲 Scroll karke niche 'WhatsApp' button pe click karein.\n"
+            "📋 Copy Message option se ready message bhejein.\n"
+            "🗣 Leader se 10 minute baat karein, doubts clear karein.\n\n"
+            "👇 Complete hone ke baad 'Next' dabayein:",
+            parse_mode='Markdown',
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
-
     elif data == 'next3':
         await query.edit_message_text(
-            "🥳 Aap ab hamare partner ban chuke ho – *TA Online Business Agency* mein welcome hai!\n\n"
+            "🎉 *Step 3: Ab aap hamare partner ban chuke hain!*\n\n"
             "📘 Aapko milega:\n"
             "✅ TA Partner ID\n"
-            "✅ Ek Free eBook jisme aapko guide milegi kaise projects lene hain\n"
-            "✅ Aur milega hamari TA community ka link – usko join karo aur usmein jo 7 groups hain unko bhi join karo.\n\n"
-            "🎯 Sab kuch dhyan se padho. Contact form mein koi bhi chiz skip na karo.\n\n"
-            "💬 Ab aap niche apna koi bhi doubt likh sakte ho.\n🤖 Bot ya team member turant jawab denge.",
+            "✅ Free eBook guide\n"
+            "✅ Community ka link – usmein 7 groups hain, unko bhi join karein.\n\n"
+            "🔔 Ab apna sawal likhein – bot ya team turant madad karegi!",
             parse_mode='Markdown'
         )
 
@@ -133,19 +183,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if keyword in user_message:
             await update.message.reply_text(answer)
             return
-    await update.message.reply_text("🤖 Kripya apna sawal thoda aur clearly likho, hum madad karne ke liye tayyar hain!")
+    await update.message.reply_text("🤖 Kripya apna sawal clearly likhein – hum madad karne ke liye ready hain!")
 
 # ✅ Main function
 def main():
-    # FastAPI ko alag thread mein run karo
     threading.Thread(target=run_fastapi).start()
-
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("projects", projects))
+    app.add_handler(CommandHandler("contact", contact))
+    app.add_handler(CommandHandler("community", community))
     app.add_handler(CallbackQueryHandler(button))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
-    print("✅ Bot is running... Telegram par /start bhejein.")
+    print("✅ Bot is running...")
     app.run_polling()
 
 if __name__ == '__main__':
