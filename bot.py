@@ -21,7 +21,7 @@ BOT_TOKEN = '7952761769:AAE6gGZidtJcspccoSSGcQcJr5HTy_-7ca4'
 
 # ✅ FAQ Answers dictionary (new Q&A added)
 faq_answers = {
-    "free": "✅ Yes, ham ek business model provide karte hain jisme training aur guidance hoti hai.",
+  "free": "✅ Yes, ham ek business model provide karte hain jisme training aur guidance hoti hai.",
     "skill": "✅ Ham sab kuch sikhate hain step-by-step.",
     "phone": "✅ Haan, phone se bhi aap kaam kar sakte ho.",
     "earning": "✅ Skill seekhne ke baad 15-20 din mein kaam mil sakta hai.",
@@ -31,8 +31,27 @@ faq_answers = {
     "genuine": "✅ Haan, real clients ke real projects milte hain.",
     "office": "✅ Yeh online business model hai, jisme ghar se kaam hota hai.",
     "support": "✅ Haan, aapko har stage pe mentor milta hai.",
-    "age": "✅ 12+ age wale log bhi isme shuruaat kar sakte hain. Agar aapke paas mobile aur dedication hai, to yeh safar aapke liye perfect hai!",
-    "investment": "✅ Shuruaat mein aapko *koi bhi investment karne ki zarurat nahi hai.*\n\n🎯 Pehle aap thoda bahut kamao, phir wahi paisa system mein laga kar apna kaam expand karo. Hamari guidance ke saath aap zero se shuruaat kar sakte ho!"
+    "investment": "✅ Shuruaat mein aapko *koi bhi investment karne ki zarurat nahi hai.*\n\n🎯 Pehle aap thoda bahut kamao, phir wahi paisa system mein laga kar apna kaam expand karo. Hamari guidance ke saath aap zero se shuruaat kar sakte ho.",
+    "refund": "✅ Agar system work na kare to aapko refund ka option milta hai.",
+    "course": "✅ Yeh koi course nahi, yeh ek business partner model hai.",
+    "future": "✅ Isme aap apna khud ka business build kar sakte ho.",
+    "language": "✅ Hindi mein training aur communication hoti hai.",
+    "age": "✅ 12+ age wale log bhi isme shuruaat kar sakte hain. Agar aapke paas mobile aur dedication hai, to yeh safar aapke liye perfect hai.",
+    "certificate": "✅ Skills ke liye digital certification bhi milta hai.",
+    "whatsapp": "✅ WhatsApp support available hai jab aap join kar lete ho.",
+    "trust": "✅ 1000+ log already is model se earn kar rahe hain.",
+    "mobile": "✅ Sirf ek smartphone se bhi aap shuruaat kar sakte ho.",
+    "content": "✅ Aapko content, templates aur guidance sab milta hai.",
+    "graphic": "✅ Graphic design ke liye tools aur tutorials milenge.",
+    "video": "✅ Video editing tools aur apps sikhaye jaate hain.",
+    "ads": "✅ Social media ads chalana bhi sikhaya jaata hai.",
+    "clients": "✅ Aapko clients milne ke liye full support hota hai.",
+    "tools": "✅ Sare tools aur platform ka access diya jaata hai.",
+    "earning proof": "✅ Haan, earning proofs bhi share kiye jaate hain.",
+    "english": "✅ English seekhne ki zarurat nahi, Hindi mein sab kuch milega.",
+    "laptop": "✅ Laptop optional hai, lekin helpful hota hai.",
+    "fake": "❌ Yeh fake nahi hai. Real logon ka real kaam hai.",
+    "join": "✅ Aap website ke through form bhar ke join kar sakte ho."
 }
 
 # ✅ /start command
