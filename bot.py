@@ -2,6 +2,20 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, ContextTypes, filters
 from telegram.constants import ChatAction
 
+from fastapi import FastAPI
+import uvicorn
+import threading
+
+# ✅ FastAPI server setup for Railway
+app_fastapi = FastAPI()
+
+@app_fastapi.get("/")
+def home():
+    return {"message": "TA Telegram Bot is running successfully!"}
+
+def run_fastapi():
+    uvicorn.run(app_fastapi, host="0.0.0.0", port=8000)
+
 # ✅ Aapka bot token
 BOT_TOKEN = '7585327553:AAHmgLbbL124JjL4FzzYA1Z0XPm2RYbrz54'
 
@@ -21,9 +35,8 @@ faq_answers = {
 
 # ✅ /start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("⏳ Please wait...")  # Optional loading effect
+    await update.message.reply_text("⏳ Please wait...")
     await update.message.chat.send_action(action=ChatAction.TYPING)
-
     keyboard = [
         [InlineKeyboardButton("YES ✅", callback_data='yes')],
         [InlineKeyboardButton("NO ❌", callback_data='no')]
@@ -37,7 +50,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=reply_markup
     )
 
-# ✅ Button click handle
+# ✅ Button click handler
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -113,7 +126,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode='Markdown'
         )
 
-# ✅ Message handler (FAQs)
+# ✅ Message handler
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text.lower()
     for keyword, answer in faq_answers.items():
@@ -124,12 +137,17 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ✅ Main function
 def main():
+    # FastAPI ko alag thread mein run karo
+    threading.Thread(target=run_fastapi).start()
+
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(button))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+
     print("✅ Bot is running... Telegram par /start bhejein.")
     app.run_polling()
 
 if __name__ == '__main__':
     main()
+
