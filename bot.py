@@ -5,6 +5,7 @@ from telegram.constants import ChatAction
 from fastapi import FastAPI
 import uvicorn
 import threading
+import asyncio
 
 # ✅ FastAPI server setup for Railway
 app_fastapi = FastAPI()
@@ -60,8 +61,15 @@ faq_answers = {
     "community": "👥 Hamari TA community ki link milegi, usko join karo aur usmein jo 7 groups hain unko bhi join karo."
 }
 
+# Dictionary to store tasks for reminder per user
+user_reminder_tasks = {}
+
 # ✅ /start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Cancel any existing reminder task for this user
+    if update.effective_user.id in user_reminder_tasks:
+        user_reminder_tasks[update.effective_user.id].cancel()
+
     await update.message.reply_text("⏳ Please wait...")
     await update.message.chat.send_action(action=ChatAction.TYPING)
 
@@ -79,11 +87,36 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=reply_markup
     )
 
+    # Schedule reminder after 30 seconds
+    task = asyncio.create_task(send_reminder_after_delay(update, context, 30))
+    user_reminder_tasks[update.effective_user.id] = task
+
+# ✅ Reminder function after delay
+async def send_reminder_after_delay(update: Update, context: ContextTypes.DEFAULT_TYPE, delay_seconds: int):
+    try:
+        await asyncio.sleep(delay_seconds)
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=(
+                "🌟 Bhai, zindagi ek baar milti hai – apna time barbaad mat karo!\n"
+                "🔥 Apne sapno ko poora karne ka yeh sahi waqt hai.\n"
+                "💪 Thoda action lo, aur apni life badlo.\n"
+                "👉 /start likho aur apna safar shuru karo!"
+            )
+        )
+    except asyncio.CancelledError:
+        # Task cancelled (user interacted before 30 seconds)
+        pass
+
 # ✅ Button Handler
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
+
+    # Cancel reminder task on any button press
+    if query.from_user.id in user_reminder_tasks:
+        user_reminder_tasks[query.from_user.id].cancel()
 
     if data == 'yes':
         keyboard = [[InlineKeyboardButton("NEXT ▶️", callback_data='next1')]]
@@ -157,12 +190,24 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ✅ Message Handler
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    # Cancel previous reminder if any
+    if user_id in user_reminder_tasks:
+        user_reminder_tasks[user_id].cancel()
+
     user_message = update.message.text.lower()
     for keyword, answer in faq_answers.items():
         if keyword in user_message:
             await update.message.reply_text(answer, parse_mode='Markdown')
+            # Reschedule reminder after 30 seconds from now
+            task = asyncio.create_task(send_reminder_after_delay(update, context, 30))
+            user_reminder_tasks[user_id] = task
             return
+
     await update.message.reply_text("🤖 Kripya apna sawal thoda aur clearly likho, hum madad karne ke liye tayyar hain!")
+    # Reschedule reminder after 30 seconds from now
+    task = asyncio.create_task(send_reminder_after_delay(update, context, 30))
+    user_reminder_tasks[user_id] = task
 
 # ✅ Main Function
 def main():
@@ -176,5 +221,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
