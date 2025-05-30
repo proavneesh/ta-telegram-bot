@@ -1,13 +1,19 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, ContextTypes, filters
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    CallbackQueryHandler,
+    MessageHandler,
+    ContextTypes,
+    filters,
+)
 from telegram.constants import ChatAction
-
+import asyncio
 from fastapi import FastAPI
 import uvicorn
 import threading
-import asyncio
 
-# ✅ FastAPI server setup for Railway
+# FastAPI server setup
 app_fastapi = FastAPI()
 
 @app_fastapi.get("/")
@@ -17,10 +23,10 @@ def home():
 def run_fastapi():
     uvicorn.run(app_fastapi, host="0.0.0.0", port=8000)
 
-# ✅ Bot Token
+# Bot Token
 BOT_TOKEN = '7952761769:AAE6gGZidtJcspccoSSGcQcJr5HTy_-7ca4'
 
-# ✅ FAQs with updated command responses
+# FAQ dictionary
 faq_answers = {
     "free": "✅ Yes, ham ek business model provide karte hain jisme training aur guidance hoti hai.",
     "skill": "✅ Ham sab kuch sikhate hain step-by-step.",
@@ -53,70 +59,38 @@ faq_answers = {
     "laptop": "✅ Laptop optional hai, lekin helpful hota hai.",
     "fake": "❌ Yeh fake nahi hai. Real logon ka real kaam hai.",
     "join": "✅ Aap website ke through form bhar ke join kar sakte ho.",
-
-    # ✅ New command responses with WhatsApp links
+    
+    # New commands with WhatsApp links & community messages
     "help": "🤝 Madad chahiye? WhatsApp par message karo: [Click Here](https://wa.me/917703940672)",
     "projects": "📢 Available projects ke details community mein milenge. TA community join karo!",
     "contact": "📞 WhatsApp pe baat karein: [Click Here](https://wa.me/917703940672)",
     "community": "👥 Hamari TA community ki link milegi, usko join karo aur usmein jo 7 groups hain unko bhi join karo."
 }
 
-# Dictionary to store tasks for reminder per user
-user_reminder_tasks = {}
-
-# ✅ /start command
+# /start command with new motivational message
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Cancel any existing reminder task for this user
-    if update.effective_user.id in user_reminder_tasks:
-        user_reminder_tasks[update.effective_user.id].cancel()
-
-    await update.message.reply_text("⏳ Please wait...")
     await update.message.chat.send_action(action=ChatAction.TYPING)
-
+    await update.message.reply_text(
+        "🌟 *Dost*, zindagi ek anmol tohfa hai jo humein sirf ek baar milta hai. Iska har pal soch samajh kar jiyo!\n\n"
+        "🔥 Sapne wahi sach hote hain, jinke liye hum apni jaan laga dete hain. Ab waqt hai apne sapno ko haqeeqat mein badalne ka!\n\n"
+        "💪 Thoda hausla, thodi mehnat aur zindagi badal dene wali lagan chahiye — tu iske liye tayaar hai.\n\n"
+        "❤️ Teri mehnat tera maqsad, aur main tere saath hoon har kadam par.\n\n"
+        "👉 Abhi /start likh, apna safar shuru kar aur apni zindagi ka hero ban!",
+        parse_mode="Markdown"
+    )
+    # Show YES / NO buttons after message
     keyboard = [
         [InlineKeyboardButton("YES ✅", callback_data='yes')],
         [InlineKeyboardButton("NO ❌", callback_data='no')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text("👇 Shuru karne ke liye kisi bhi option par click karein:", reply_markup=reply_markup)
 
-    await update.message.reply_text(
-        "🔥 Apni life badalne ka waqt aa gaya hai!\n\n"
-        "Agar aap YouTube, Facebook ya mobile mein time barbaad kar rahe ho bina kisi direction ke, to yeh moka mat gavaana!\n\n"
-        "🚀 Sirf 3 Aasan Steps follow karo, aur apna earning journey start karo ghar baithe.\n\n"
-        "👇👇 Shuru karne ke liye ek option choose karo:",
-        reply_markup=reply_markup
-    )
-
-    # Schedule reminder after 30 seconds
-    task = asyncio.create_task(send_reminder_after_delay(update, context, 30))
-    user_reminder_tasks[update.effective_user.id] = task
-
-# ✅ Reminder function after delay
-async def send_reminder_after_delay(update: Update, context: ContextTypes.DEFAULT_TYPE, delay_seconds: int):
-    try:
-        await asyncio.sleep(delay_seconds)
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=(
-                "🌟 Bhai, zindagi ek baar milti hai – apna time barbaad mat karo!\n"
-                "🔥 Apne sapno ko poora karne ka yeh sahi waqt hai.\n"
-                "💪 Thoda action lo, aur apni life badlo.\n"
-                "👉 /start likho aur apna safar shuru karo!"
-            )
-        )
-    except asyncio.CancelledError:
-        # Task cancelled (user interacted before 30 seconds)
-        pass
-
-# ✅ Button Handler
+# Button handler for all button clicks
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
-
-    # Cancel reminder task on any button press
-    if query.from_user.id in user_reminder_tasks:
-        user_reminder_tasks[query.from_user.id].cancel()
 
     if data == 'yes':
         keyboard = [[InlineKeyboardButton("NEXT ▶️", callback_data='next1')]]
@@ -183,44 +157,4 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "✅ TA Partner ID\n"
             "✅ Ek Free eBook jisme aapko guide milegi kaise projects lene hain\n"
             "✅ Aur milega hamari TA community ka link – usko join karo aur usmein jo 7 groups hain unko bhi join karo.\n\n"
-            "🎯 Sab kuch dhyan se padho. Contact form mein koi bhi chiz skip na karo.\n\n"
-            "💬 Ab aap niche apna koi bhi doubt likh sakte ho.\n🤖 Bot ya team member turant jawab denge.",
-            parse_mode='Markdown'
-        )
-
-# ✅ Message Handler
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    # Cancel previous reminder if any
-    if user_id in user_reminder_tasks:
-        user_reminder_tasks[user_id].cancel()
-
-    user_message = update.message.text.lower()
-    for keyword, answer in faq_answers.items():
-        if keyword in user_message:
-            await update.message.reply_text(answer, parse_mode='Markdown')
-            # Reschedule reminder after 30 seconds from now
-            task = asyncio.create_task(send_reminder_after_delay(update, context, 30))
-            user_reminder_tasks[user_id] = task
-            return
-
-    await update.message.reply_text("🤖 Kripya apna sawal thoda aur clearly likho, hum madad karne ke liye tayyar hain!")
-    # Reschedule reminder after 30 seconds from now
-    task = asyncio.create_task(send_reminder_after_delay(update, context, 30))
-    user_reminder_tasks[user_id] = task
-
-# ✅ Main Function
-def main():
-    threading.Thread(target=run_fastapi).start()
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CallbackQueryHandler(button))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("✅ Bot is running... Telegram par /start bhejein.")
-    app.run_polling()
-
-if __name__ == '__main__':
-    main()
-
-
-
+            "🎯 Sab kuch dhyan se padho. Contact form mein koi bhi chiz skip na
